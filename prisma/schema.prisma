@@ -1,0 +1,37 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  name     String @db.Text
+  password String @db.Text
+  role     Role   @default(USER)
+
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime?
+
+  @@map("users")
+}
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
+model JsonData {
+  id        String   @id @default(cuid())
+  json      Json     @db.Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("json_data")
+}
